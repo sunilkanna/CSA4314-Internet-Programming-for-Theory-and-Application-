@@ -1,0 +1,69 @@
+PROGRAM:
+
+Client code:
+
+<HTML>
+<HEAD>
+<TITLE>Database Lookup</TITLE>
+</HEAD>
+
+<BODY>
+<H1>Database Lookup</H1>
+<FORM action="basic.jsp"  method="POST">
+Please enter the reg no of the student you want to find:
+<BR>
+<INPUT TYPE="TEXT" NAME="id">
+<BR>
+<INPUT TYPE="SUBMIT" value="Submit">
+</FORM>
+</BODY>
+</HTML>
+
+Server code :
+
+<%@ page import="java.sql.*" %>
+<%@ page import="java.io.*" %>
+<%@ page import="java.util.*" %>
+
+<% Class.forName("com.mysql.jdbc.Driver "); %>
+<html>
+<head>
+<title>fetching data from a database</title>
+</head>
+<body>
+<h1>fetching data from a database</h1>
+
+<% 
+Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/library","root", "Jaisakthi");
+
+Statement statement = connection.createStatement();
+
+int id = Integer.parseInt(request.getParameter("id"));  
+
+ResultSet resultset = 
+statement.executeQuery("select * from mark where regno = " + id ) ; 
+
+if(!resultset.next()) {
+out.println("Sorry, could not find that publisher. ");
+} else {
+%>
+
+<table border="1">
+<tr>
+<th>regno</th>
+<th>name</th>
+<th>mark</th>
+</tr>
+<tr>
+<td> <%= resultset.getInt(1) %> </td>
+<td> <%= resultset.getString(2) %> </td>
+<td> <%= resultset.getInt(3) %> </td>
+         </tr>
+</table>
+<br>
+<% 
+} 
+%>
+</body>
+</html>
+
